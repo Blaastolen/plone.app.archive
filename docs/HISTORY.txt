@@ -1,8 +1,11 @@
 Changelog
 =========
 
-0.2 (Unreleased)
+0.2-eli (2015-04-27)
 ----------------
+
+- Add simple browsing interface
+
 
 0.1 (2011-05-19)
 ----------------
