@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+  <metal:main fill-slot="main">
+
+    <h1 class="documentFirstHeading" tal:content="view/item/Title">
+         Title
+    </h1>
+
+    <span class="documentByLine" tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime;">
+        <span class="documentAuthor"
+            i18n:translate="label_by_author">
+        by
+            <tal:block tal:condition="view/item/Creator"
+                tal:define="author python:context.portal_membership.getMemberInfo(view.item.Creator())">
+              <a href="#"
+                 tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${view/item/Creator};
+                                 target python:'_blank' if view.item.portal_type in ('FileAttachment', 'ImageAttachment') else None"
+                 tal:content="python:author and author['fullname'] or view.item.Creator()"
+                 tal:omit-tag="not:view/item/Creator"
+                 i18n:name="author">
+                Bob Dobalina
+              </a>
+            </tal:block>
+        </span>
+
+        <span class="documentPublished" tal:condition="python:view.item.EffectiveDate() != 'None'">
+          &mdash;
+            <span i18n:translate="box_published">
+            published
+            </span>
+            <span tal:replace="python:toLocalizedTime(view.item.EffectiveDate(), long_format=0)">
+            August 16, 2001 at 23:35:59
+            </span>
+        </span>
+
+        <span class="documentModified">
+          &mdash;
+            <span i18n:translate="box_last_modified">
+            last modified
+            </span>
+            <span tal:replace="python:toLocalizedTime(view.item.ModificationDate(), long_format=1)">
+            August 16, 2001 at 23:35:59
+            </span>
+        </span>
+
+        <tal:disabled condition="nothing">
+            <span tal:define="tags view/item/Subject|nothing"
+                  tal:condition="tags">
+                &mdash;
+                <tal:filedunder i18n:translate="label_filed_under">Filed under:</tal:filedunder>
+                    <span tal:repeat="tag tags">
+                        <a href=""
+                           class="link-tag"
+                           rel="tag"
+                           tal:content="tag"
+                           tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/search?Subject%3Alist=${tag}">
+                           Tag
+                        </a><tal:separator condition="not: repeat/tag/end">,</tal:separator>
+                    </span>
+            </span>
+        </tal:disabled>
+    </span>
+
+    <div class="documentDescription" tal:content="view/item/Description">
+        Description
+    </div>
+
+    <div>
+        <span tal:replace="structure view/item/getText" />
+    </div>
+
+    <div class="visualClear"><!-- --></div>
+
+
+
+
+</metal:main>
+</body>
+</html>

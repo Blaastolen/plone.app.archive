@@ -2,9 +2,12 @@
     xmlns="http://namespaces.zope.org/zope"
     i18n_domain="plone.app.archive">
 
-<utility
+  <utility
     factory=".archive.ContentArchive"
-    provides=".interfaces.IContentArchive" 
+    provides=".interfaces.IContentArchive"
     />
+
+  <include package=".browser" />
+
 
 </configure>

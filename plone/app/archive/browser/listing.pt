@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+
+  <metal:content-title fill-slot="content-title">
+      <h1 class="documentFirstHeading">
+          Archive Listing
+      </h1>
+  </metal:content-title>
+
+  <metal:content-description fill-slot="content-description">
+      <div class="documentDescription">
+          All archived content on ELI
+      </div>
+  </metal:content-description>
+
+  <metal:content-core fill-slot="content-core"
+          tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;
+                      Batch python:modules['Products.CMFPlone'].Batch;
+                      b_size python:100;b_start python:0;b_start request/b_start | b_start;
+                      batch python:Batch(view.archive(), b_size, int(b_start), orphan=3);">
+    <table>
+      <tr>
+        <th>Archive Date</th>
+        <th>Title</th>
+      </tr>
+    <tr tal:repeat="item batch">
+      <td tal:content="python: toLocalizedTime(item['timestamp'])">Date</td>
+      <td ><a href="#" tal:attributes="href python: 'archive-listing/?item=%s'%item['id']" tal:content="item/title">Title</a></td>
+    </tr>
+    <table>
+    <div class="visualClear"><!-- --></div>
+    <div metal:use-macro="here/batch_macros/macros/navigation" />
+  </metal:content-core>
+
+</body>
+</html>
